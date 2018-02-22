@@ -11,10 +11,6 @@ import java.time.Month;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * GKislin
- * 31.05.2015.
- */
 public class UserMealsUtil {
     public static void main(String[] args) {
         List<UserMeal> mealList = Arrays.asList(
@@ -35,9 +31,6 @@ public class UserMealsUtil {
             System.out.println(mealWithExceed);
         }
 
-
-//        .toLocalDate();
-//        .toLocalTime();
     }
 
     public static List<UserMealWithExceed> getFilteredWithExceeded(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
@@ -76,13 +69,7 @@ public class UserMealsUtil {
                     UserMealWithExceed mealWithExceed = new UserMealWithExceed(meal.getDateTime(), meal.getDescription(), meal.getCalories(), exceed);
                     mealWithExceedList.add(mealWithExceed);
                 });
-//                .map(mealWithExceedList.add(new UserMealWithExceed(meal.getDateTime(), meal.getDescription(), meal.getCalories(), true));)
-//                    boolean exceed = false;
-//                    if(dateCaloriesMap.get(meal.getDate()) > caloriesPerDay) exceed = true;
-//                    mealWithExceedList.add(new UserMealWithExceed(meal.getDateTime(), meal.getDescription(), meal.getCalories(), exceed));
-//                });
-//
-//
+
         return mealWithExceedList;
     }
 }
