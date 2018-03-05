@@ -15,38 +15,22 @@ import java.util.stream.Collectors;
 public class MealsUtil {
     public static void main(String[] args) {
 
-        //getFilteredWithExceeded(mealList, LocalTime.of(7, 0), LocalTime.of(12,0), 2000);
-//        .toLocalDate();
-//        .toLocalTime();
     }
 
-    public static List<MealWithExceed>  getFilteredWithExceeded(List<Meal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        // TODO return filtered list with correctly exceeded field
-        return null;
-    }
-
-    public static List<MealWithExceed> getMealWithExceedList(List<Meal> mealList, int caloriesPerDay){
-
-        Map<LocalDate, Integer> CaloriesByDate = mealList.stream()
+    public static List<MealWithExceed>  getFilteredWithExceeded(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+        Map<LocalDate, Integer> caloriesSumByDate = meals.stream()
                 .collect(
-                        Collectors.toMap(Meal::getDate, Meal::getCalories, Integer::sum)
+                        Collectors.groupingBy(Meal::getDate, Collectors.summingInt(Meal::getCalories))
                 );
-        return mealList.stream()
-                .map(meal -> createWithExceed(meal,CaloriesByDate.get(meal.getDate()) > caloriesPerDay))
+
+        return meals.stream()
+                .filter(meal -> TimeUtil.isBetween(meal.getDateTime().toLocalTime(), startTime, endTime))
+                .map(meal -> createWithExceed(meal, caloriesSumByDate.get(meal.getDate()) > caloriesPerDay))
                 .collect(Collectors.toList());
     }
 
-    public static List<Meal> initMealList(){
-        return Arrays.asList(
-                new Meal(LocalDateTime.of(2015, Month.MAY, 30,10,0), "Завтрак", 500),
-                new Meal(LocalDateTime.of(2015, Month.MAY, 30,13,0), "Обед", 1000),
-                new Meal(LocalDateTime.of(2015, Month.MAY, 30,20,0), "Ужин", 500),
-                new Meal(LocalDateTime.of(2015, Month.MAY, 31,10,0), "Завтрак", 1000),
-                new Meal(LocalDateTime.of(2015, Month.MAY, 31,13,0), "Обед", 500),
-                new Meal(LocalDateTime.of(2015, Month.MAY, 31,20,0), "Ужин", 510)
-        );
-    }
-    public static MealWithExceed createWithExceed(Meal meal, boolean exceeded) {
-        return new MealWithExceed(meal.getDateTime(), meal.getDescription(), meal.getCalories(), exceeded);
+
+    private static MealWithExceed createWithExceed(Meal meal, boolean exceeded) {
+        return new MealWithExceed(meal.getDateTime(), meal.getDescription(), meal.getCalories(), exceeded, meal.getMealId());
     }
 }

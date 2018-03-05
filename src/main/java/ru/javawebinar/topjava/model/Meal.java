@@ -2,8 +2,13 @@ package ru.javawebinar.topjava.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Meal {
+
+    private int mealId;
+
     private final LocalDateTime dateTime;
 
     private final String description;
@@ -14,6 +19,15 @@ public class Meal {
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
+        this.mealId = -1;
+    }
+
+    public int getMealId() {
+        return mealId;
+    }
+
+    public void setMealId(int mealId) {
+        this.mealId = mealId;
     }
 
     public LocalDateTime getDateTime() {
@@ -29,4 +43,20 @@ public class Meal {
     }
 
     public LocalDate getDate(){return dateTime.toLocalDate();}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Meal meal = (Meal) o;
+        return getCalories() == meal.getCalories() &&
+                Objects.equals(getDateTime(), meal.getDateTime()) &&
+                Objects.equals(getDescription(), meal.getDescription());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getDateTime(), getDescription(), getCalories());
+    }
 }

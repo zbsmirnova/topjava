@@ -55,15 +55,19 @@
         <th width="150">DateTime</th>
         <th width="80">Description</th>
         <th width="80">Calories</th>
+        <th colspan=2>Action</th>
     </tr>
 
     <c:forEach items="${requestScope.mealList}" var="meal">
             <tr style = "color: ${meal.exceed ? "red" : "green"}">
-                <td>${meal.dateString}</td>
+                <td>${localDateTimeFormat.format(meal.dateTime)}</td>
                 <td>${meal.description}</td>
                 <td>${meal.calories}</td>
+                <td><a href="meals?action=edit&id=<c:out value="${meal.id}"/>">Update</a></td>
+                <td><a href="meals?action=delete&id=<c:out value="${meal.id}"/>">Delete</a></td>
             </tr>
     </c:forEach>
 </table>
+<p><a href="meals?action=insert">Add Meal</a></p>
 </body>
 </html>
