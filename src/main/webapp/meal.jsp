@@ -17,7 +17,7 @@
     <title>Meal data</title>
 </head>
 <body>
-<h3><a href="index.html">Home</a></h3>
+<h3><a href="meals">Back to Meals</a></h3>
 <form method="post">
     <p> <input placeholder="yyyy-MM-dd HH:mm" type="text" name="date"></p>
     <p> <input placeholder="Введите описание" type="text" name="description"></p>
