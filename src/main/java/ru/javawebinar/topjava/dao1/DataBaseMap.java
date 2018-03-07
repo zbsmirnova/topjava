@@ -14,7 +14,7 @@ public class DataBaseMap implements MealDao {
 
     private static Map<Integer, Meal> dbMap = new ConcurrentHashMap<>();
 
-    private static AtomicInteger id = new AtomicInteger(0);;
+    private static AtomicInteger id = new AtomicInteger(0);
 
     public DataBaseMap(){
         init();
@@ -42,7 +42,7 @@ public class DataBaseMap implements MealDao {
         return new ArrayList<>(dbMap.values());
     }
 
-    public void init(){
+    private void init(){
 
                 add(new Meal(LocalDateTime.of(2015, Month.MAY, 30,10,0), "Завтрак", 500));
                 add(new Meal(LocalDateTime.of(2015, Month.MAY, 30,13,0), "Обед", 1000));
