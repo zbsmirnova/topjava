@@ -19,14 +19,13 @@ public class Meal {
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
-        this.mealId = -1;
     }
 
-    public int getMealId() {
+    public int getId() {
         return mealId;
     }
 
-    public void setMealId(int mealId) {
+    public void setId(int mealId) {
         this.mealId = mealId;
     }
 
@@ -49,7 +48,8 @@ public class Meal {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Meal meal = (Meal) o;
-        return getCalories() == meal.getCalories() &&
+        return  getId() == meal.getId() &&
+                getCalories() == meal.getCalories() &&
                 Objects.equals(getDateTime(), meal.getDateTime()) &&
                 Objects.equals(getDescription(), meal.getDescription());
     }
@@ -57,6 +57,6 @@ public class Meal {
     @Override
     public int hashCode() {
 
-        return Objects.hash(getDateTime(), getDescription(), getCalories());
+        return Objects.hash(getDateTime(), getDescription(), getCalories(), getId());
     }
 }
