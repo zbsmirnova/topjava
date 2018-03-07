@@ -59,4 +59,14 @@ public class Meal {
 
         return Objects.hash(getDateTime(), getDescription(), getCalories(), getId());
     }
+
+    @Override
+    public String toString() {
+        return "Meal{" +
+                "mealId=" + mealId +
+                ", dateTime=" + dateTime +
+                ", description='" + description + '\'' +
+                ", calories=" + calories +
+                '}';
+    }
 }

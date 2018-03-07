@@ -51,14 +51,17 @@ public class MealServlet extends HttpServlet {
             case ("edit"):
                 forward = INSERT_OR_EDIT;
                 int mealId = Integer.parseInt(request.getParameter("id"));
+                log.debug("action = edit, meal.id = " + mealId);
                 Meal meal = mealDao.getById(mealId);
                 request.setAttribute("meal", meal);
                 break;
             case ("listMeal"):
+                log.debug("action = listMeal, redirect to meals.jsp");
                 forward = LIST_MEALS;
                 request.setAttribute("meals", MealsUtil.getFilteredWithExceeded(mealDao.getAll(), LocalTime.MIN, LocalTime.MAX, 2000));
                 break;
             case ("insert"):
+                log.debug("action = insert, redirect to meal.jsp");
                 forward = INSERT_OR_EDIT;
                 break;
         }
@@ -66,10 +69,11 @@ public class MealServlet extends HttpServlet {
 
         }
         else{
-                int mealId = Integer.parseInt(request.getParameter("id"));
-                mealDao.deleteById(mealId);
-                request.getSession().setAttribute("mealList", MealsUtil.getFilteredWithExceeded(mealDao.getAll(), LocalTime.MIN, LocalTime.MAX, 2000));
-                response.sendRedirect("meals");
+            int mealId = Integer.parseInt(request.getParameter("id"));
+            log.debug("action = delete, meal.id = " + mealId);
+            mealDao.deleteById(mealId);
+            request.getSession().setAttribute("mealList", MealsUtil.getFilteredWithExceeded(mealDao.getAll(), LocalTime.MIN, LocalTime.MAX, 2000));
+            response.sendRedirect("meals");
         }
 
 
@@ -88,12 +92,14 @@ public class MealServlet extends HttpServlet {
         if(id == null || id.isEmpty())
         {
             mealDao.add(meal);
+            log.debug("adding : " + meal);
         }
         else
         {
             int mealId = Integer.parseInt(id);
             meal.setId(mealId);
             mealDao.update(mealId, meal);
+            log.debug("updating :" + meal);
         }
 
         request.setAttribute("localDateTimeFormat", formatter);
