@@ -7,6 +7,22 @@
 <head>
     <title>Meal list</title>
     <style>
+        dl {
+            background: none repeat scroll 0 0 #FAFAFA;
+            margin: 8px 0;
+            padding: 0;
+        }
+
+        dt {
+            display: inline-block;
+            width: 170px;
+        }
+
+        dd {
+            display: inline-block;
+            margin-left: 8px;
+            vertical-align: top;
+        }
         .normal {
             color: green;
         }
@@ -17,6 +33,28 @@
     </style>
 </head>
 <body>
+<section>
+    <form>
+        <dl>
+            <dt>DateStart:</dt>
+            <dd><input type="date" name="dateStart"></dd>
+        </dl>
+        <dl>
+            <dt>DateEnd:</dt>
+            <dd><input type="date" name="dateEnd"></dd>
+        </dl>
+        <dl>
+            <dt>TimeStart:</dt>
+            <dd><input type="time" name="startTime"></dd>
+        </dl>
+        <dl>
+            <dt>TimeEnd:</dt>
+            <dd><input type="time" name="endTime"></dd>
+        </dl>
+        <button type="submit">Save</button>
+        <button onclick="window.history.back()" type="button">Cancel</button>
+    </form>
+</section>
 <section>
     <h3><a href="index.html">Home</a></h3>
     <h2>Meals</h2>
