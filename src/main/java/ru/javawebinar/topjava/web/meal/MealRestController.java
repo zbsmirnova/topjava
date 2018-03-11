@@ -28,7 +28,10 @@ public class MealRestController{
         this.service = service;
     }
 
-    public <T extends Comparable> List<Meal> getAll(String startDate, String endDate, String startTime, String endTime){
+    public List<Meal> getAll(){
+        return service.getAll(AuthorizedUser.id(), LocalDateTime.MIN, LocalDateTime.MAX, LocalDateTime.class);
+    }
+    public List<Meal> getAll(String startDate, String endDate, String startTime, String endTime){
         log.info("getAll");
         LocalTime localStartTime = startTime ==  null ?  LocalTime.MIN : startTime.equals("") ? LocalTime.MIN : LocalTime.parse(startTime);
         LocalTime localEndTime = endTime ==  null ?  LocalTime.MAX : endTime.equals("") ? LocalTime.MAX : LocalTime.parse(endTime);
