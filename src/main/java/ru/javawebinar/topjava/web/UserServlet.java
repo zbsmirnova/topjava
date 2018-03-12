@@ -21,7 +21,8 @@ public class UserServlet extends HttpServlet {
         if(action.equalsIgnoreCase("setUser")) {
             AuthorizedUser.setId(Integer.parseInt(request.getParameter("userId")));
             log.debug("AuthorizedUser id = " + AuthorizedUser.id());
-            request.getRequestDispatcher("meals").forward(request, response);
+            response.sendRedirect("meals");
+            //request.getRequestDispatcher("meals").forward(request, response);
         }
         else request.getRequestDispatcher("/users.jsp").forward(request, response);
 

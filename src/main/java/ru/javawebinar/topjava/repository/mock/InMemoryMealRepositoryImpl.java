@@ -1,11 +1,10 @@
-package ru.javawebinar.topjava.repository.mock.mock;
+package ru.javawebinar.topjava.repository.mock;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.repository.mock.InMemoryUserRepositoryImpl;
 import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
@@ -29,30 +28,33 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal save(Meal meal, int userId) {
-        if( meal.getUserId() != userId) return null;
-        log.info("save meal " + meal);
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
+            log.info("saving new meal id = " + meal.getId() + ", UserId = " + userId);
             repository.put(meal.getId(), meal);
             return meal;
         }
-
+        log.info("updating meal id = " + meal.getId() + ", UserId = " + userId);
         // treat case: update, but absent in storage
-        return repository.computeIfPresent(userId, (id, oldMeal) -> meal);
+        return   repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
+
     }
 
     @Override
     public boolean delete(int id, int userId) {
-        if( repository.get(id).getUserId() != userId) return false;
+        Meal forDelete = get(id, userId);
+        if(forDelete == null || forDelete.getUserId() != userId) return false;
         log.info("delete meal id = " + id);
         return repository.remove(id) != null;
     }
 
     @Override
     public Meal get(int id, int userId) {
-        if(repository.get(id).getUserId() != userId) return null;
+        if(!repository.containsKey(id)) return null;
+        Meal getMeal = repository.get(id);
+        if(getMeal.getUserId() != userId) return null;
         log.info("get meal id = " + id);
-        return repository.get(id);
+        return getMeal;
     }
 
     @Override
@@ -61,7 +63,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
         return repository.values().stream()
                 .filter(meal -> (meal.getUserId() == userId))
                 .filter(meal -> DateTimeUtil.isBetween(meal.getDateTime(), startTime, endTime, type))
-                .sorted(Comparator.comparing(Meal::getDate).thenComparing(Meal::getTime)).collect(Collectors.toList());
+                .sorted(Comparator.comparing(Meal::getDate).thenComparing(Meal::getTime).reversed()).collect(Collectors.toList());
     }
 
     private void init(Meal meal){
