@@ -9,28 +9,24 @@ import java.time.temporal.Temporal;
 public class DateTimeUtil {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    public  static boolean isBetween(Temporal lt, Temporal startTime, Temporal endTime, Class <? extends Comparable> type) {
-        if(type == LocalTime.class) {
-            LocalTime ltLocal = LocalTime.from(lt);
-            LocalTime startTimeLocal = LocalTime.from(startTime);
-            LocalTime endTimeLocal = LocalTime.from(endTime);
-            return ltLocal.compareTo(startTimeLocal) >= 0 && ltLocal.compareTo(endTimeLocal) <= 0;
+    public  static <T extends Comparable> boolean isBetween(LocalDateTime lt, T startTime, T endTime) {
+        if(startTime instanceof LocalDate && endTime instanceof LocalDate){
+            LocalDate start = (LocalDate) startTime;
+            LocalDate end = (LocalDate) endTime;
+            LocalDate ltDate = lt.toLocalDate();
+            return ltDate.compareTo(start) >= 0 && ltDate.compareTo(end) <= 0;
         }
-        else if(type == LocalDate.class){
-            LocalDate ltLocal = LocalDate.from(lt);
-            LocalDate startTimeLocal = LocalDate.from(startTime);
-            LocalDate endTimeLocal = LocalDate.from(endTime);
-            return ltLocal.compareTo(startTimeLocal) >= 0 && ltLocal.compareTo(endTimeLocal) <= 0;
-
+        else if(startTime instanceof LocalTime && endTime instanceof LocalTime) {
+            LocalTime start = (LocalTime) startTime;
+            LocalTime end = (LocalTime) endTime;
+            LocalTime ltTime = lt.toLocalTime();
+            return ltTime.compareTo(start) >= 0 && ltTime.compareTo(end) <= 0;
         }
-        else if(type == LocalDateTime.class){
-            LocalDateTime ltLocal = LocalDateTime.from(lt);
-            LocalDateTime startTimeLocal = LocalDateTime.from(startTime);
-            LocalDateTime endTimeLocal = LocalDateTime.from(endTime);
-            return ltLocal.compareTo(startTimeLocal) >= 0 && ltLocal.compareTo(endTimeLocal) <= 0;
-
+        else{
+            LocalDateTime start = (LocalDateTime) startTime;
+            LocalDateTime end = (LocalDateTime) endTime;
+            return lt.compareTo(start) >= 0 && lt.compareTo(end) <= 0;
         }
-       return false;
     }
 
     public static String toString(LocalDateTime ldt) {

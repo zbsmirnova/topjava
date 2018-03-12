@@ -29,7 +29,7 @@ public class MealRestController{
     }
 
     public List<Meal> getAll(){
-        return service.getAll(AuthorizedUser.id(), LocalDateTime.MIN, LocalDateTime.MAX, LocalDateTime.class);
+        return service.getAll(AuthorizedUser.id(), LocalDateTime.MIN, LocalDateTime.MAX);
     }
     public List<Meal> getAll(String startDate, String endDate, String startTime, String endTime){
 
@@ -38,27 +38,24 @@ public class MealRestController{
         LocalDate localStartDate = startDate == null ?  LocalDate.MIN : startDate.equals("") ? LocalDate.MIN : LocalDate.parse(startDate);
         LocalDate localEndDate = endDate == null ?  LocalDate.MAX : endDate.equals("") ? LocalDate.MAX : LocalDate.parse(endDate);
 
-        Temporal startTemporal;
-        Temporal endTemporal;
-        Class <? extends Comparable> type;
 
+        Comparable start;
+        Comparable end;
         if(startDate == null && endDate == null || startDate.equals("") && endDate.equals("")){
-            startTemporal = localStartTime;
-            endTemporal = localEndTime;
-            type = LocalTime.class;
+            start = localStartTime;
+            end = localEndTime;
         }
         else if(startTime == null && endTime == null || startTime.equals("")&& endTime.equals("")){
-            startTemporal = localStartDate;
-            endTemporal = localEndDate;
-            type = LocalDate.class;
+            start = localStartDate;
+            end = localEndDate;
         }
         else{
-            startTemporal = LocalDateTime.of(localStartDate, localStartTime);
-            endTemporal = LocalDateTime.of(localEndDate, localEndTime);
-            type = LocalDateTime.class;
+            start = LocalDateTime.of(localStartDate, localStartTime);
+            end = LocalDateTime.of(localEndDate, localEndTime);
+
         }
 
-        return service.getAll(AuthorizedUser.id(), startTemporal, endTemporal, type);
+        return service.getAll(AuthorizedUser.id(), start, end);
     }
 
     public Meal get(int id) {

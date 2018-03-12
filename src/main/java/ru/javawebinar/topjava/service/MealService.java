@@ -16,5 +16,5 @@ public interface MealService {
 
     void update(Meal meal, int userId);
 
-    List<Meal> getAll(int userId, Temporal startTime, Temporal endTime, Class <? extends Comparable> type);
+    List<Meal> getAll(int userId, Comparable startTime, Comparable endTime);
 }

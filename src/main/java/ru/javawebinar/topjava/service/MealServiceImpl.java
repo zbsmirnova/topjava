@@ -40,7 +40,7 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public List<Meal> getAll(int userId, Temporal startTime, Temporal endTime, Class <? extends Comparable> type) {
-        return repository.getAll(userId, startTime, endTime, type);
+    public List<Meal> getAll(int userId, Comparable startTime, Comparable endTime) {
+        return repository.getAll(userId, startTime, endTime);
     }
 }
