@@ -35,6 +35,10 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
             return meal;
         }
         log.info("updating meal id = " + meal.getId() + ", UserId = " + userId);
+        Integer newMealId = meal.getUserId();
+        Integer repMealId = repository.get(meal.getId()).getUserId();
+
+        if(newMealId != null && newMealId != repMealId) return null;
         // treat case: update, but absent in storage
         return   repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
 
@@ -50,9 +54,8 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        if(!repository.containsKey(id)) return null;
         Meal getMeal = repository.get(id);
-        if(getMeal.getUserId() != userId) return null;
+        if(getMeal == null || getMeal.getUserId() != userId) return null;
         log.info("get meal id = " + id);
         return getMeal;
     }
