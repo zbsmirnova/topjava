@@ -36,9 +36,10 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
         }
         log.info("updating meal id = " + meal.getId() + ", UserId = " + userId);
         Integer newMealId = meal.getUserId();
-        Integer repMealId = repository.get(meal.getId()).getUserId();
-
-        if(newMealId != null && newMealId != repMealId) return null;
+        Meal repMeal = repository.get(meal.getId());
+        if(repMeal == null || newMealId == null) return null;
+        Integer repMealId = repMeal.getUserId();
+        if(newMealId != repMealId) return null;
         // treat case: update, but absent in storage
         return   repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
 
