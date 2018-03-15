@@ -22,12 +22,12 @@ public class DateTimeUtil {
             LocalTime ltTime = lt.toLocalTime();
             return ltTime.compareTo(start) >= 0 && ltTime.compareTo(end) <= 0;
         }
-        else{
+        else if(startTime instanceof LocalDateTime && endTime instanceof LocalDateTime){
             LocalDateTime start = (LocalDateTime) startTime;
             LocalDateTime end = (LocalDateTime) endTime;
-            return lt.compareTo(start) >= 0 && lt.compareTo(end) <= 0;
+            return lt.compareTo(start) >= 0 && lt.compareTo(end) <= 0;}
+            else return false;
         }
-    }
 
     public static String toString(LocalDateTime ldt) {
         return ldt == null ? "" : ldt.format(DATE_TIME_FORMATTER);
