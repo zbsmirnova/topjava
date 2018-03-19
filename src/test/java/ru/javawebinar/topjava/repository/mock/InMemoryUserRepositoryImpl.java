@@ -21,6 +21,9 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     private Map<Integer, User> repository = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(100);
 
+    {
+        init();
+    }
     public void init() {
         repository.clear();
         repository.put(UserTestData.USER_ID, USER);
