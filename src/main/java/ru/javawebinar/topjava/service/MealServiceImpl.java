@@ -16,10 +16,10 @@ import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 public class MealServiceImpl implements MealService {
     private final MealRepository repository;
     @Autowired
-    public MealServiceImpl(MealRepository repository) {
+    public MealServiceImpl(@Qualifier("jdbcMealRepositoryImpl") MealRepository repository) {
         this.repository = repository;
     }
-
+//
 //
 //    @Autowired
 //    public MealServiceImpl(MealRepository repository) {
