@@ -4,7 +4,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -41,7 +40,6 @@ public class MealServiceTest {
     @Test
     public void get() {
         Meal meal = service.get(ADMIN_MEAL1_ID, ADMIN_ID);
-        Meal adm = ADMIN_MEAL_1;
         assertMatch(ADMIN_MEAL_1, meal);
     }
 
@@ -59,7 +57,7 @@ public class MealServiceTest {
 
     @Test(expected = NotFoundException.class)
     public void deleteAnothersMeal() throws Exception {
-        service.delete(100003, ADMIN_ID);
+        service.delete(MEAL2_ID, ADMIN_ID);
     }
 
     @Test
@@ -96,8 +94,7 @@ public class MealServiceTest {
 
     @Test
     public void getAll() {
-        List<Meal> meals = service.getAll(USER_ID);
-        assertMatch(meals, MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1);
+        assertMatch(service.getAll(USER_ID), MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1);
     }
 
     @Test
@@ -112,6 +109,7 @@ public class MealServiceTest {
         updated.setDescription("updated");
         updated.setCalories(333);
         updated.setDateTime(LocalDateTime.now());
+        service.update(updated, USER_ID);
         assertMatch(service.get(MEAL1_ID, USER_ID), updated);
     }
 
@@ -129,7 +127,6 @@ public class MealServiceTest {
     public void create() throws Exception {
         Meal newMeal = new Meal(LocalDateTime.of(2016, Month.MAY, 30, 10, 0), "Завтрак", 555);
         service.create(newMeal, USER_ID);
-        List<Meal> meals = service.getAll(USER_ID);
         assertMatch(service.getAll(USER_ID), newMeal, MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1);
     }
 
