@@ -124,3 +124,6 @@ Maven/ Spring/ Security/ JPA(Hibernate)/ REST(Jackson)/ Bootstrap(CSS)/ jQuery +
 - Возможные доработки приложения
 - Опрос участников проекта
 - Домашнее задание по проекту: составление резюме
+
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/63d7fa2fddc146eb8b9a6e3a39c30999)](https://www.codacy.com/app/zbsmirnova/topjava?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zbsmirnova/topjava&amp;utm_campaign=Badge_Grade)
