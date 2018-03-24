@@ -8,6 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
@@ -23,6 +24,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
         "classpath:spring/spring-db.xml"
 })
 @RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
 
@@ -36,19 +38,19 @@ public class MealServiceTest {
     @Test
     public void delete() throws Exception {
         service.delete(MEAL1_ID, USER_ID);
-        assertMatch(service.getAll(USER_ID), MEAL6, MEAL5, MEAL4, MEAL3, MEAL2);
+        assertMatch(service.getAll(USER_ID), MEAL2 , MEAL3, MEAL4, MEAL5, MEAL6);
     }
 
     @Test(expected = NotFoundException.class)
     public void deleteNotFound() throws Exception {
-        service.delete(MEAL1_ID, 1);
+        service.delete(MEAL1_ID, ADMIN_ID);
     }
 
     @Test
     public void save() throws Exception {
         Meal created = getCreated();
         service.create(created, USER_ID);
-        assertMatch(service.getAll(USER_ID), created, MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1);
+        assertMatch(service.getAll(USER_ID), MEAL1, MEAL2, MEAL3, MEAL4, MEAL5, MEAL6, created);
     }
 
     @Test
@@ -76,13 +78,13 @@ public class MealServiceTest {
 
     @Test
     public void getAll() throws Exception {
-        assertMatch(service.getAll(USER_ID), MEALS);
+        assertMatch(service.getAll(USER_ID), MEAL1, MEAL2, MEAL3, MEAL4, MEAL5, MEAL6);
     }
 
     @Test
     public void getBetween() throws Exception {
         assertMatch(service.getBetweenDates(
                 LocalDate.of(2015, Month.MAY, 30),
-                LocalDate.of(2015, Month.MAY, 30), USER_ID), MEAL3, MEAL2, MEAL1);
+                LocalDate.of(2015, Month.MAY, 30), USER_ID), MEAL1, MEAL2, MEAL3);
     }
 }
