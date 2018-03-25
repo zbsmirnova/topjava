@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,8 +25,8 @@ public class Meal extends AbstractBaseEntity {
     public static final String ALL_SORTED = "Meal.getAllSorted";
     public static final String GET_BETWEEN = "Meal.getBetween";
 
-    @Column(name = "date_time", nullable = false)
-    @DateTimeFormat
+    @Column(name = "date_time", nullable = false, unique = true)
+    @NotNull
     private LocalDateTime dateTime;
 
     @Column(name = "description", nullable = false)
@@ -37,7 +38,7 @@ public class Meal extends AbstractBaseEntity {
     @Range(min = 10, max = 10000)
     private int calories;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     public Meal() {

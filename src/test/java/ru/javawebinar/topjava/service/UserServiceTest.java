@@ -1,7 +1,14 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -12,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
+import ru.javawebinar.topjava.web.meal.MealRestController;
 
 import java.util.Collections;
 import java.util.Date;
@@ -27,11 +35,44 @@ import static ru.javawebinar.topjava.UserTestData.*;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class UserServiceTest {
 
+    private long startTime;
+    private long endTime;
+    private boolean passed;
+
+    private static final Logger log = LoggerFactory.getLogger(MealRestController.class);
+
     static {
         // Only for postgres driver logging
         // It uses java.util.logging and logged via jul-to-slf4j bridge
         SLF4JBridgeHandler.install();
     }
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
+    @Rule
+    public TestRule testWatcher = new TestWatcher() {
+        @Override
+        protected void succeeded(Description description) {
+            passed = true;
+        }
+        @Override
+        protected void failed(Throwable e, Description description) {
+            log.info("Test " + description.getClassName() + " failed on " + e.getStackTrace()[0]);
+            //logs as failed tests with expected exception, which are passed. Debugger marks this tests as passed
+        }
+        @Override
+        protected void starting(Description description){
+            startTime = System.currentTimeMillis();
+            super.starting(description);
+        }
+
+        @Override
+        protected void finished(Description description) {
+            endTime = System.currentTimeMillis();
+            super.finished(description);
+            if(passed) log.info("Test " + description.getClassName() + " passed in "  + (endTime - startTime) + " ms");
+        }
+    };
 
     @Autowired
     private UserService service;
@@ -44,8 +85,9 @@ public class UserServiceTest {
         assertMatch(service.getAll(), ADMIN, newUser, USER);
     }
 
-    @Test(expected = DataAccessException.class)
+    @Test
     public void duplicateMailCreate() throws Exception {
+        thrown.expect(DataAccessException.class);
         service.create(new User(null, "Duplicate", "user@yandex.ru", "newPass", Role.ROLE_USER));
     }
 
@@ -55,8 +97,9 @@ public class UserServiceTest {
         assertMatch(service.getAll(), ADMIN);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void notFoundDelete() throws Exception {
+        thrown.expect(NotFoundException.class);
         service.delete(1);
     }
 
@@ -66,8 +109,9 @@ public class UserServiceTest {
         assertMatch(user, USER);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void getNotFound() throws Exception {
+        thrown.expect(NotFoundException.class);
         service.get(1);
     }
 
@@ -91,4 +135,5 @@ public class UserServiceTest {
         List<User> all = service.getAll();
         assertMatch(all, ADMIN, USER);
     }
+
 }
