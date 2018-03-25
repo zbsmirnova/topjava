@@ -127,3 +127,5 @@ Maven/ Spring/ Security/ JPA(Hibernate)/ REST(Jackson)/ Bootstrap(CSS)/ jQuery +
 
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/63d7fa2fddc146eb8b9a6e3a39c30999)](https://www.codacy.com/app/zbsmirnova/topjava?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zbsmirnova/topjava&amp;utm_campaign=Badge_Grade)
+
+[![Dependency Status](https://www.versioneye.com/user/projects/5ab753460fb24f4489395c4e/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5ab753460fb24f4489395c4e)
