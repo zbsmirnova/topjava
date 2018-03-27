@@ -1,12 +1,12 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.AssumptionViolatedException;
+import org.hsqldb.lib.StopWatch;
+import org.junit.AfterClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
-import org.junit.rules.Timeout;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -20,17 +20,17 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
-import ru.javawebinar.topjava.web.meal.MealRestController;
 
-import java.beans.Statement;
-import java.rmi.UnexpectedException;
+import javax.persistence.PersistenceException;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import static java.time.LocalDateTime.of;
 import static ru.javawebinar.topjava.MealTestData.*;
-import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
-import static ru.javawebinar.topjava.UserTestData.USER_ID;
+import static ru.javawebinar.topjava.UserTestData.*;
 
 @ContextConfiguration({
         "classpath:spring/spring-app.xml",
@@ -41,15 +41,22 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
 
-    private long startTime;
-    private long endTime;
-    private boolean passed;
+    private StopWatch stopWatch = new StopWatch();
+    private static Map<String, Long> test_time_map = new HashMap<>();
 
-    private static final Logger log = LoggerFactory.getLogger(MealRestController.class);
+    private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
 
     static {
         SLF4JBridgeHandler.install();
     }
+
+    @AfterClass
+    public static void afterClass(){
+        for(Map.Entry<String, Long> entry : test_time_map.entrySet()){
+            System.out.println("Test " + entry.getKey() +" worked " + entry.getValue() + " ms.");
+        }
+    }
+
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -58,25 +65,27 @@ public class MealServiceTest {
     public TestRule testWatcher = new TestWatcher() {
         @Override
         protected void succeeded(Description description) {
-            passed = true;
         }
         @Override
         protected void failed(Throwable e, Description description) {
-            log.info("Test " + description.getClassName() + " failed on " + e.getStackTrace()[0]);
+            log.info("Test " + description.getMethodName() + " failed on " + e.getStackTrace()[0]);
             //logs as failed tests with expected exception, which are passed. Debugger marks this tests as passed
         }
         @Override
         protected void starting(Description description){
-            startTime = System.currentTimeMillis();
+            stopWatch.start();
             super.starting(description);
         }
 
         @Override
         protected void finished(Description description) {
-            endTime = System.currentTimeMillis();
             super.finished(description);
-            if(passed) log.info("Test " + description.getClassName() + " passed in "  + (endTime - startTime) + " ms");
+            long elapsedTime = stopWatch.elapsedTime();
+            test_time_map.put(description.getDisplayName(), elapsedTime);
+            log.info("Test time " + elapsedTime + " ms");
+            stopWatch.stop();
         }
+
     };
 
         @Autowired
@@ -85,7 +94,7 @@ public class MealServiceTest {
         @Test
         public void delete() throws Exception {
             service.delete(MEAL1_ID, USER_ID);
-            assertMatch(service.getAll(USER_ID), MEAL2, MEAL3, MEAL4, MEAL5, MEAL6);
+            assertMatch(service.getAll(USER_ID), MEAL6, MEAL5, MEAL4,  MEAL3, MEAL2);
 
         }
 
@@ -99,7 +108,7 @@ public class MealServiceTest {
         public void save() throws Exception {
             Meal created = getCreated();
             service.create(created, USER_ID);
-            assertMatch(service.getAll(USER_ID), MEAL1, MEAL2, MEAL3, MEAL4, MEAL5, MEAL6, created);
+            assertMatch(service.getAll(USER_ID), created, MEAL6, MEAL5, MEAL4,  MEAL3, MEAL2, MEAL1);
         }
 
         @Test
@@ -129,14 +138,29 @@ public class MealServiceTest {
 
         @Test
         public void getAll() throws Exception {
-            assertMatch(service.getAll(USER_ID), MEAL1, MEAL2, MEAL3, MEAL4, MEAL5, MEAL6);
+            assertMatch(service.getAll(USER_ID),  MEALS);
         }
 
         @Test
         public void getBetween() throws Exception {
             assertMatch(service.getBetweenDates(
                     LocalDate.of(2015, Month.MAY, 30),
-                    LocalDate.of(2015, Month.MAY, 30), USER_ID), MEAL1, MEAL2, MEAL3);
+                    LocalDate.of(2015, Month.MAY, 30), USER_ID), MEAL3, MEAL2, MEAL1);
         }
+
+        @Test
+        public void createSameDateOneUser(){
+            thrown.expect(PersistenceException.class);
+            Meal meal = new Meal(of(2015, Month.MAY, 30, 10, 0), "Дублированная дата завтрак", 1000);
+            service.create(meal, USER.getId());
+            List<Meal> meals = service.getAll(USER.getId());
+        }
+
+    @Test
+    public void createSameDateDifferentUsers(){
+        Meal meal = new Meal(of(2015, Month.MAY, 30, 13, 0), "Обед", 1000);
+        service.create(meal, ADMIN.getId());
+        List<Meal> meals = service.getAll(USER.getId());
+    }
 
     }
