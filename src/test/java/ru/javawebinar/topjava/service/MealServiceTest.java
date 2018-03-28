@@ -37,7 +37,6 @@ import static ru.javawebinar.topjava.UserTestData.*;
         "classpath:spring/spring-db.xml"
 })
 @RunWith(SpringJUnit4ClassRunner.class)
-@Transactional
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
 
@@ -153,14 +152,14 @@ public class MealServiceTest {
             thrown.expect(PersistenceException.class);
             Meal meal = new Meal(of(2015, Month.MAY, 30, 10, 0), "Дублированная дата завтрак", 1000);
             service.create(meal, USER.getId());
-            List<Meal> meals = service.getAll(USER.getId());
+            //List<Meal> meals = service.getAll(USER.getId());
         }
 
     @Test
     public void createSameDateDifferentUsers(){
         Meal meal = new Meal(of(2015, Month.MAY, 30, 13, 0), "Обед", 1000);
         service.create(meal, ADMIN.getId());
-        List<Meal> meals = service.getAll(USER.getId());
+        //List<Meal> meals = service.getAll(USER.getId());
     }
 
     }
