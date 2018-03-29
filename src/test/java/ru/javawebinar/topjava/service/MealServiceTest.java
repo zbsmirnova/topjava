@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -149,7 +150,7 @@ public class MealServiceTest {
 
         @Test
         public void createSameDateOneUser(){
-            thrown.expect(PersistenceException.class);
+            thrown.expect(DataIntegrityViolationException.class);
             Meal meal = new Meal(of(2015, Month.MAY, 30, 10, 0), "Дублированная дата завтрак", 1000);
             service.create(meal, USER.getId());
             //List<Meal> meals = service.getAll(USER.getId());
@@ -159,7 +160,7 @@ public class MealServiceTest {
     public void createSameDateDifferentUsers(){
         Meal meal = new Meal(of(2015, Month.MAY, 30, 13, 0), "Обед", 1000);
         service.create(meal, ADMIN.getId());
-        //List<Meal> meals = service.getAll(USER.getId());
+        List<Meal> meals = service.getAll(USER.getId());
     }
 
     }
