@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.service;
 
 import org.junit.AfterClass;
+import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.Stopwatch;
@@ -31,21 +32,11 @@ public abstract class AbstractServiceTest {
 
     public  static StringBuilder results = new StringBuilder();
 
-    protected static   String testClass;
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
     @Rule
-    //http://stackoverflow.com/questions/14892125/what-is-the-best-practice-to-determine-the-execution-time-of-the-bussiness-relev
-    public Stopwatch stopwatch = new Stopwatch() {
-        @Override
-        protected void finished(long nanos, Description description) {
-            if(testClass == null) testClass = description.getTestClass().getSimpleName();
-            String result = String.format("\n%-25s %7d", description.getMethodName(),  TimeUnit.NANOSECONDS.toMillis(nanos));
-            results.append(result);
-            log.info(result + " ms\n");
-        }
-    };
+    public StopwatchImpl stopwatch = new StopwatchImpl();
 
     static {
         // needed only for java.util.logging (postgres driver)
@@ -55,9 +46,9 @@ public abstract class AbstractServiceTest {
     @AfterClass
     public static void printResult() {
         log.info("\n---------------------------------" +
-                "\n" + testClass + "   Duration, ms" +
+                "\n                     Duration, ms" +
                 "\n---------------------------------" +
-                results +
+               results +
                 "\n---------------------------------");
     }
 
