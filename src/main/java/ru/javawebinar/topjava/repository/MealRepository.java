@@ -1,5 +1,7 @@
 package ru.javawebinar.topjava.repository;
 
+import org.springframework.context.annotation.Profile;
+import ru.javawebinar.topjava.Profiles;
 import ru.javawebinar.topjava.model.Meal;
 
 import java.time.LocalDateTime;
@@ -20,4 +22,9 @@ public interface MealRepository {
 
     // ORDERED dateTime desc
     List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId);
+
+    @Profile(Profiles.DATAJPA)
+    Meal getMealWithUser(int mealId);
+
+
 }

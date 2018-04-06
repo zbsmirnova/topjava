@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.User;
 
+import javax.persistence.OrderBy;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,4 +31,9 @@ public interface CrudUserRepository extends JpaRepository<User, Integer> {
     List<User> findAll(Sort sort);
 
     User getByEmail(String email);
+
+    @Transactional
+    @OrderBy("date_time desc")
+    @Query("SELECT u FROM User u JOIN FETCH u.meals m where u.id=?1 order by m.dateTime desc")
+    User getUserWithMeals(int userId);
 }
