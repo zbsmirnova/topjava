@@ -96,10 +96,5 @@ public class JdbcMealRepositoryImpl implements MealRepository {
                 ROW_MAPPER, userId, dateTimeFormatted.apply(startDate), dateTimeFormatted.apply(endDate));
     }
 
-    @Override
-    public Meal getMealWithUser(int mealId) {
-        return null;
-    }
-
 
 }

@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
 
-import javax.persistence.OrderBy;
 import java.time.LocalDateTime;
 import java.util.List;
 

@@ -22,6 +22,7 @@ public interface UserService {
 
     List<User> getAll();
 
-    @Profile(Profiles.DATAJPA)
-    User getUserWithMeals(int userId);
+    default User getUserWithMeals(int userId){
+        return null;
+    }
 }

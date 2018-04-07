@@ -23,8 +23,8 @@ public interface MealRepository {
     // ORDERED dateTime desc
     List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId);
 
-    @Profile(Profiles.DATAJPA)
-    Meal getMealWithUser(int mealId);
-
+    default Meal getMealWithUser(int mealId){
+        return null;
+    }
 
 }

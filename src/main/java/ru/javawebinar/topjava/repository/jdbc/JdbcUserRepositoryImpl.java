@@ -73,8 +73,4 @@ public class JdbcUserRepositoryImpl implements UserRepository {
         return jdbcTemplate.query("SELECT * FROM users ORDER BY name, email", ROW_MAPPER);
     }
 
-    @Override
-    public User getUserWithMeals(int userId) {
-        return null;
-    }
 }
