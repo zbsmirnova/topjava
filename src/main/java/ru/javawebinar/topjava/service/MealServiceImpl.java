@@ -56,7 +56,6 @@ public class MealServiceImpl implements MealService {
         return repository.save(meal, userId);
     }
 
-    @Profile(Profiles.DATAJPA)
     public Meal getMealWithUser(int mealId){
         return repository.getMealWithUser(mealId);
     }
