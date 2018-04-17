@@ -27,10 +27,20 @@
         </property>
     </bean>
 
-    <!--<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"-->
-          <!--p:cacheSeconds="5"-->
-          <!--p:defaultEncoding="UTF-8">-->
-        <!--<property name="basenames" value="file:///#{systemEnvironment['TOPJAVA_ROOT']}/config/messages/app"/>-->
-        <!--<property name="fallbackToSystemLocale" value="false"/>-->
+
+
+    <!--<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">-->
+        <!--<property name="mappings">-->
+            <!--<value>-->
+                <!--*/delete.htm*=jspMealController-->
+                <!--/update.htm=jspMealController-->
+            <!--</value>-->
+        <!--</property>-->
     <!--</bean>-->
+
+
+    <!--<bean id="jspMealController"-->
+          <!--class="ru.javawebinar.topjava.web.JspMealController" />-->
+
 </beans>
+
