@@ -4,8 +4,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <html>
-<jsp:include page="fragments/headTag.jsp"/>
 <body>
+<jsp:include page="fragments/headTag.jsp"/>
 <section>
     <h3><a href="/"><spring:message code="app.home"/></a></h3>
     <h2>
@@ -15,7 +15,7 @@
 
     <hr>
     <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>
-    <form method="post" action="meals">
+    <form method="post" action="/meals/save">
         <input type="hidden" name="id" value="${meal.id}">
         <dl>
             <dt><spring:message code="mealForm.dateTime"/></dt>
@@ -33,5 +33,6 @@
         <button onclick="window.history.back()" type="button"><spring:message code="mealForm.cancel"/></button>
     </form>
 </section>
+<jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>

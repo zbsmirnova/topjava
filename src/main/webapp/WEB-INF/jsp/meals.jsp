@@ -8,7 +8,7 @@
 <body>
 <section>
     <h3><jsp:include page="fragments/mealsBodyHeader.jsp"/></h3>
-    <form method="post" action="meals?action=filter">
+    <form method="post" action="meals/filter">
         <dl>
             <dt><spring:message code="meals.fromDate"/></dt>
             <dd><input type="date" name="startDate" value="${param.startDate}"></dd>
@@ -57,5 +57,6 @@
         </c:forEach>
     </table>
 </section>
+<jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>
