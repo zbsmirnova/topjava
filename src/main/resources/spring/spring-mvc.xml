@@ -46,7 +46,19 @@
     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
           p:cacheSeconds="5"
           p:defaultEncoding="UTF-8">
-        <property name="basenames" value="file:///C:/projects/topjava/hw/topjava/config/messages/app"/>
+        <property name="basenames" value="file:///#{systemEnvironment['TOPJAVA_ROOT']}/config/messages/app"/>
         <property name="fallbackToSystemLocale" value="false"/>
     </bean>
+    <!--file:///C:/projects/topjava/hw/topjava/config/-->
+    <!--<mvc:annotation-driven conversion-service="conversionService"/>-->
+
+    <!--<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">-->
+        <!--<property name="converters">-->
+            <!--<list>-->
+                <!--&lt;!&ndash; converters is a set of both converters and converterfactories &ndash;&gt;-->
+                <!--<bean class="ru.javawebinar.topjava.util.converter.DateConverterFactory" />-->
+                <!--<bean class="ru.javawebinar.topjava.util.converter.TimeConverterFactory" />-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
 </beans>
