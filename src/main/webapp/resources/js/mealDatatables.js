@@ -1,5 +1,5 @@
-var ajaxUrl = "ajax/admin/users/";
-var datatableApi;
+var ajaxUrlMeal = "ajax/admin/meals/";
+var datatableApiMeal;
 
 // $(document).ready(function () {
 $(function () {

@@ -29,7 +29,7 @@ function deleteRow(id) {
 
 function updateTable() {
     $.get(ajaxUrl, function (data) {
-        datatableApi.clear().rows.add(data).draw();
+        datatableApiMeal.clear().rows.add(data).draw();
     });
 }
 
@@ -48,8 +48,32 @@ function save() {
     });
 }
 
+function saveMeal() {
+    var form = $("#detailsForm");
+    debugger;
+    $.ajax({
+        type: "POST",
+        url: ajaxUrlMeal,
+        data: form.serialize(),
+        success: function () {
+            $("#editRow").modal("hide");
+            updateMealsTable();
+            successNoty("Saved");
+        }
+    });
+}
+function updateMealsTable() {
+    debugger;
+    $.get(ajaxUrlMeal, function (data) {
+        datatableApi.clear().rows.add(data).draw();
+    });
+}
+
 function filter() {
-    
+
+}
+function clearFilter() {
+
 }
 
 var failedNote;
