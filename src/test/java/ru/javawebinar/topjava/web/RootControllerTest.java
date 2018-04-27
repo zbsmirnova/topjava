@@ -10,6 +10,11 @@ import static ru.javawebinar.topjava.MealTestData.MEAL1;
 import static ru.javawebinar.topjava.UserTestData.USER;
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
+import ru.javawebinar.topjava.MealTestData;
+import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.AuthorizedUser;
+
+
 public class RootControllerTest extends AbstractControllerTest {
 
     @Test
@@ -26,6 +31,15 @@ public class RootControllerTest extends AbstractControllerTest {
                                 hasProperty("name", is(USER.getName()))
                         )
                 )));
+    }
+    @Test
+    public void testMeals() throws Exception {
+        mockMvc.perform(get("/meals"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(view().name("meals"))
+                .andExpect(forwardedUrl("/WEB-INF/jsp/meals.jsp"))
+                .andExpect(model().attribute("meals", MealsUtil.getWithExceeded(MealTestData.MEALS, AuthorizedUser.getCaloriesPerDay())));
     }
 
 }
