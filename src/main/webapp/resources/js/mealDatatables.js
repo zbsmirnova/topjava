@@ -1,9 +1,9 @@
-var ajaxUrlMeal = "ajax/admin/meals/";
+var ajaxUrlMeal = "ajax/meals/";
 var datatableApiMeal;
 
 // $(document).ready(function () {
 $(function () {
-    datatableApi = $("#datatable").DataTable({
+    datatableApiMeal = $("#datatable").DataTable({
         "paging": false,
         "info": true,
         "columns": [
@@ -33,4 +33,5 @@ $(function () {
         ]
     });
     makeEditable();
+
 });

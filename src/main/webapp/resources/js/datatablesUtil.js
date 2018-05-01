@@ -12,7 +12,9 @@ function makeEditable() {
 }
 
 function add() {
+    debugger;
     $("#detailsForm").find(":input").val("");
+    debugger;
     $("#editRow").modal();
 }
 
@@ -29,9 +31,11 @@ function deleteRow(id) {
 
 function updateTable() {
     $.get(ajaxUrl, function (data) {
-        datatableApiMeal.clear().rows.add(data).draw();
+        datatableApi.clear().rows.add(data).draw();
     });
 }
+
+
 
 function save() {
     var form = $("#detailsForm");
@@ -48,7 +52,17 @@ function save() {
     });
 }
 
-function saveMeal() {
+function checkboxUser(id, enabled) {
+    debugger;
+    $.ajax({
+        type: "POST",
+        url: ajaxUrl + id,
+        data: enabled.val
+    });
+    debugger;
+
+}
+function saveMeal(startDate, startTime, endDate, endTime) {
     var form = $("#detailsForm");
     debugger;
     $.ajax({
@@ -56,78 +70,116 @@ function saveMeal() {
         url: ajaxUrlMeal,
         data: form.serialize(),
         success: function () {
-            $("#editRow").modal("hide");
-            updateMealsTable();
-            successNoty("Saved");
+            debugger;
+            $("#editRow").modal('hide');
+            //updateMealsTable();
+            successNoty("Meal Saved");
+            filter(startDate, startTime, endDate, endTime)
         }
     });
 }
 function updateMealsTable() {
     debugger;
     $.get(ajaxUrlMeal, function (data) {
-        datatableApi.clear().rows.add(data).draw();
+        datatableApiMeal.clear().rows.add(data).draw();
     });
 }
 
-function filter() {
 
-}
-function clearFilter() {
 
-}
-
-var failedNote;
-
-function closeNoty() {
-    if (failedNote) {
-        failedNote.close();
-        failedNote = undefined;
+    function deleteRowMeal(id) {
+        debugger;
+        $.ajax({
+            url: ajaxUrlMeal + id,
+            type: "DELETE",
+            success: function () {
+                debugger;
+                updateMealsTable();
+                successNoty("Deleted");
+            }
+        });
     }
-}
 
-function successNoty(text) {
-    closeNoty();
-    new Noty({
-        text: "<span class='fa fa-lg fa-check'></span> &nbsp;" + text,
-        type: 'success',
-        layout: "bottomRight",
-        timeout: 1000
-    }).show();
-}
+    function filter(startDate, startTime, endDate, endTime) {
+     var dateTimeArray = {startDate:startDate.value, startTime:startTime.value, endDate:endDate.value, endTime:endTime.value}
+        debugger;
+        filterUtil(dateTimeArray);
+        successNoty("Filtered");
+        }
 
-function failNoty(jqXHR) {
-    closeNoty();
-    failedNote = new Noty({
-        text: "<span class='fa fa-lg fa-exclamation-circle'></span> &nbsp;Error status: " + jqXHR.status,
-        type: "error",
-        layout: "bottomRight"
-    }).show();
-}
-
-var failedNote;
-
-function closeNoty() {
-    if (failedNote) {
-        failedNote.close();
-        failedNote = undefined;
+    function clearFilter() {
+        debugger;
+        filterUtil();
+        successNoty("Filter cleared");
     }
-}
 
-function successNoty(text) {
-    closeNoty();
-    new Noty({
-        text: "<span class='fa fa-lg fa-check'></span> &nbsp;" + text,
-        type: 'success',
-        layout: "bottomRight",
-        timeout: 1000
-    }).show();
-}
+    function filterUtil(dateArray) {
+    debugger;
+        $.ajax({
+            type: "GET",
+            url: ajaxUrlMeal + "filter",
+            data: dateArray,
+            success: function (data) {
+                $("#editRow").modal('hide');
+                debugger;
+                datatableApiMeal.clear().rows.add(data).draw();
+            }
+        });
 
-function failNoty(jqXHR) {
-    closeNoty();
-    failedNote = new Noty({
-        text: "<span class='fa fa-lg fa-exclamation-circle'></span> &nbsp;Error status: " + jqXHR.status,
-        type: "error",
-        layout: "bottomRight"
-    }).show();
-}
+    }
+
+    var failedNote;
+
+    function closeNoty() {
+        if (failedNote) {
+            failedNote.close();
+            failedNote = undefined;
+        }
+    }
+
+    function successNoty(text) {
+        closeNoty();
+        new Noty({
+            text: "<span class='fa fa-lg fa-check'></span> &nbsp;" + text,
+            type: 'success',
+            layout: "bottomRight",
+            timeout: 1000
+        }).show();
+    }
+
+    function failNoty(jqXHR) {
+        closeNoty();
+        failedNote = new Noty({
+            text: "<span class='fa fa-lg fa-exclamation-circle'></span> &nbsp;Error status: " + jqXHR.status,
+            type: "error",
+            layout: "bottomRight"
+        }).show();
+    }
+
+    var failedNote;
+
+    function closeNoty() {
+        if (failedNote) {
+            failedNote.close();
+            failedNote = undefined;
+        }
+    }
+
+    function successNoty(text) {
+        closeNoty();
+        new Noty({
+            text: "<span class='fa fa-lg fa-check'></span> &nbsp;" + text,
+            type: 'success',
+            layout: "bottomRight",
+            timeout: 1000
+        }).show();
+    }
+
+    function failNoty(jqXHR) {
+        closeNoty();
+        failedNote = new Noty({
+            text: "<span class='fa fa-lg fa-exclamation-circle'></span> &nbsp;Error status: " + jqXHR.status,
+            type: "error",
+            layout: "bottomRight"
+        }).show();
+    }
