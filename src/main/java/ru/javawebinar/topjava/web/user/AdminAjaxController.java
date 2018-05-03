@@ -27,12 +27,13 @@ public class AdminAjaxController extends AbstractUserController {
 
     @PostMapping("/{id}")
     @Transactional
-    public void enableDisable(@PathVariable("id") int id, @RequestParam("enabled") boolean enabled) {
+    public void enableDisable(@PathVariable("id") int id, @RequestParam("enabled") String enabled) {
 //        boolean enabledBool = false;
 //        if(enabled.equals("true")) enabledBool = true;
-        User user = super.get(id);
-        user.setEnabled(!enabled);
-        super.update(user, user.getId());
+        System.out.println(enabled);
+//        User user = super.get(id);
+//        user.setEnabled(!enabled);
+//        super.update(user, user.getId());
     }
 
     @PostMapping

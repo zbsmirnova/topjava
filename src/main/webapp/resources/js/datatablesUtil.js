@@ -57,7 +57,7 @@ function checkboxUser(id, enabled) {
     $.ajax({
         type: "POST",
         url: ajaxUrl + id,
-        data: enabled.val
+        data: {enabled:enabled.value}
     });
     debugger;
 
