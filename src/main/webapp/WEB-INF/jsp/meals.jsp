@@ -5,6 +5,9 @@
 <html>
 <jsp:include page="fragments/headTag.jsp"/>
 <body>
+<link rel="stylesheet" type="text/css" href="webjars/datetimepicker/2.5.14/jquery.datetimepicker.css"/>
+<script src="webjars/datetimepicker/2.5.14/jquery.datetimepicker.js"></script>
+<script type="text/javascript" src="webjars/datetimepicker/2.5.14/build/jquery.datetimepicker.full.min.js" defer></script>
 <script type="text/javascript" src="resources/js/datatablesUtil.js" defer></script>
 <script type="text/javascript" src="resources/js/mealDatatables.js" defer></script>
 <jsp:include page="fragments/bodyHeader.jsp"/>
@@ -76,7 +79,7 @@
             </thead>
             <c:forEach items="${meals}" var="meal">
                 <jsp:useBean id="meal" type="ru.javawebinar.topjava.to.MealWithExceed"/>
-                <tr data-mealExceed="${meal.exceed}">
+                <tr>
                     <td>
                             <%--${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}--%>
                             <%--<%=TimeUtil.toString(meal.getDateTime())%>--%>
@@ -110,6 +113,32 @@
                                placeholder="<spring:message code="meal.dateTime"/>">
                     </div>
 
+                    <%--<div class="form-group" id = "datetimepicker1">--%>
+                        <%--<label for="dateTime" class="col-form-label"><spring:message code="meal.dateTime"/></label>--%>
+                        <%--<input class="form-control" id="dateTime" name="dateTime"--%>
+                               <%--placeholder="<spring:message code="meal.dateTime"/>">--%>
+                        <%--<span class="glyphicon glyphicon-calendar"></span>--%>
+                        <%--<script type="text/javascript">--%>
+                            <%--$(function () {--%>
+                                <%--$('#datetimepicker1').datetimepicker();--%>
+                            <%--});--%>
+                        <%--</script>--%>
+                    <%--</div>--%>
+
+                    <%--<div class="form-group">--%>
+                        <%--<label for="dateTime" class="control-label col-xs-3">Дата/Время</label>--%>
+
+                        <%--<div class="col-xs-9">--%>
+                            <%--<input class="form-control" id="dateTime" name="dateTime"--%>
+                                   <%--placeholder="Дата/Время">--%>
+                        <%--</div>--%>
+                        <%--<script type="text/javascript">--%>
+                            <%--$(function () {--%>
+                                <%--$('#dateTime').datetimepicker();--%>
+                            <%--});--%>
+                        <%--</script>--%>
+                    <%--</div>--%>
+
                     <div class="form-group">
                         <label for="description" class="col-form-label"><spring:message
                                 code="meal.description"/></label>
@@ -119,7 +148,7 @@
 
                     <div class="form-group">
                         <label for="calories" class="col-form-label"><spring:message code="meal.calories"/></label>
-                        <input type="number" class="form-control" id="calories" name="calories" placeholder="1000">
+                        <input type="number" class="form-control" id="calories" name="calories" placeholder="1000" value="10">
                     </div>
                 </form>
             </div>
@@ -137,5 +166,14 @@
     </div>
 </div>
 <jsp:include page="fragments/footer.jsp"/>
+<script type="text/javascript">
+    var i18n = [];
+    i18n["addTitle"] = '<spring:message code="meal.add"/>';
+    i18n["editTitle"] = '<spring:message code="meal.edit"/>';
+
+    <c:forEach var="key" items='<%=new String[]{"common.deleted","common.saved","common.enabled","common.disabled","common.errorStatus"}%>'>
+    i18n["${key}"] = "<spring:message code="${key}"/>";
+    </c:forEach>
+</script>
 </body>
 </html>

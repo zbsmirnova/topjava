@@ -11,15 +11,22 @@ function makeEditable() {
 }
 
 function add() {
+    debugger;
     $("#modalTitle").html(i18n["addTitle"]);
     form.find(":input").val("");
     $("#editRow").modal();
+
+
 }
 
 function updateRow(id) {
+    debugger;
     $("#modalTitle").html(i18n["editTitle"]);
+    debugger;
     $.get(ajaxUrl + id, function (data) {
+        debugger;
         $.each(data, function (key, value) {
+            debugger;
             form.find("input[name='" + key + "']").val(value);
         });
         $('#editRow').modal();
@@ -41,6 +48,7 @@ function updateTableByData(data) {
 }
 
 function save() {
+    debugger;
     $.ajax({
         type: "POST",
         url: ajaxUrl,
