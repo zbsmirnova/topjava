@@ -31,12 +31,7 @@ public class MealTo extends BaseTo{
         this.calories = calories;
     }
 
-//    public MealTo(Integer id, LocalDateTime dateTime, String description, String calories) {
-//        super(id);
-//        this.dateTime = dateTime;
-//        this.description = description;
-//        this.calories = 10;
-//    }
+    public MealTo(){}
 
     public void setDateTime(LocalDateTime localDateTime){ this.dateTime = localDateTime;}
 
