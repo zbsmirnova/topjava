@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <html>
 <jsp:include page="fragments/headTag.jsp"/>
@@ -8,13 +9,13 @@
 <nav class="navbar navbar-dark bg-dark">
     <div class="container">
         <div class="navbar-brand"><img src="resources/images/icon-meal.png"> <spring:message code="app.title"/></div>
-        <form class="form-inline my-2" action="spring_security_check" method="post">
+        <form:form class="form-inline my-2" action="spring_security_check" method="post">
             <input class="form-control mr-1" type="text" placeholder="Email" name="username">
             <input class="form-control mr-1" type="password" placeholder="Password" name="password">
             <button class="btn btn-success" type="submit">
                 <span class="fa fa-sign-in"></span>
             </button>
-        </form>
+        </form:form>
     </div>
 </nav>
 
@@ -28,6 +29,7 @@
         </c:if>
         <br/>
         <p>
+            <a class="btn btn-lg btn-success" href="register"><spring:message code="app.register"/> &raquo;</a>
             <button type="submit" class="btn btn-lg btn-primary" onclick="setCredentials('user@yandex.ru', 'password')">
                 <spring:message code="app.login"/> User
             </button>
@@ -73,6 +75,9 @@
 </div>
 <jsp:include page="fragments/footer.jsp"/>
 <script type="text/javascript">
+    <c:if test="${not empty param.username}">
+    setCredentials("${param.username}", "");
+    </c:if>
     function setCredentials(username, password) {
         $('input[name="username"]').val(username);
         $('input[name="password"]').val(password);

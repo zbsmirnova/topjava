@@ -33,6 +33,14 @@ public class AdminRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    public void testGetNotFound() throws Exception {
+        mockMvc.perform(get(REST_URL + 1)
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isUnprocessableEntity())
+                .andDo(print());
+    }
+
+    @Test
     public void testGetByEmail() throws Exception {
         mockMvc.perform(get(REST_URL + "by?email=" + USER.getEmail()))
                 .andExpect(status().isOk())
@@ -46,6 +54,14 @@ public class AdminRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isNoContent());
         assertMatch(userService.getAll(), ADMIN);
+    }
+
+    @Test
+    public void testDeleteNotFound() throws Exception {
+        mockMvc.perform(delete(REST_URL + 1)
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isUnprocessableEntity())
+                .andDo(print());
     }
 
     @Test
@@ -63,10 +79,10 @@ public class AdminRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testCreate() throws Exception {
-        User expected = new User(null, "New", "new@gmail.com", "newPass", Role.ROLE_USER, Role.ROLE_ADMIN);
+        User expected = new User(null, "New", "new@gmail.com", "newPass", 2300, Role.ROLE_USER, Role.ROLE_ADMIN);
         ResultActions action = mockMvc.perform(post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(expected)))
+                .content(jsonWithPassword(expected, "newPass")))
                 .andExpect(status().isCreated());
 
         User returned = readFromJson(action, User.class);
